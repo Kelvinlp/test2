@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VoltaShop · Accesorios electrónicos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root{
+  --bg:#0d0e1a; --surface:#161830; --surface2:#1f2242; --line:#2d3160;
+  --text:#eceefb; --muted:#9a9fc7; --accent:#7c5cff; --accent2:#4d8dff;
+  --ok:#2fd18b; --warn:#ff5d73;
+  --r:14px;
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.5}
+h1,h2,h3,.brand{font-family:'Space Grotesk',sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+
+/* Header */
+header{position:sticky;top:0;z-index:20;background:rgba(13,14,26,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;height:64px;gap:12px}
+.brand{font-size:1.35rem;font-weight:700;display:flex;align-items:center;gap:10px}
+.brand i{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));font-size:.95rem}
+.tabs{display:flex;gap:6px;background:var(--surface);padding:4px;border-radius:999px;border:1px solid var(--line)}
+.tab{border:0;background:none;padding:8px 16px;border-radius:999px;cursor:pointer;color:var(--muted);font-weight:700;font-size:.9rem;display:flex;gap:8px;align-items:center}
+.tab.active{background:var(--accent);color:#fff}
+
+/* Hero */
+.hero{padding:44px 0 20px}
+.hero h1{font-size:clamp(1.9rem,5vw,3.1rem);line-height:1.1;max-width:15ch;letter-spacing:-.02em}
+.hero p{color:var(--muted);margin-top:12px;max-width:52ch}
+
+/* Filters */
+.filters{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:26px 0 22px}
+.search{flex:1 1 260px;position:relative}
+.search i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted)}
+.search input{width:100%;padding:12px 14px 12px 40px;background:var(--surface);border:1px solid var(--line);border-radius:999px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--surface);padding:9px 14px;border-radius:999px;cursor:pointer;font-size:.88rem;font-weight:500;color:var(--muted);display:flex;gap:7px;align-items:center}
+.chip:hover{border-color:var(--accent)}
+.chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
+
+/* Grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px;padding-bottom:60px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;transition:border-color .2s,transform .2s}
+.card:hover{border-color:var(--accent);transform:translateY(-3px)}
+.thumb{position:relative;aspect-ratio:4/3;background:var(--surface2)}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.card.sold .thumb img{filter:grayscale(1) brightness(.55)}
+.cat{position:absolute;top:10px;left:10px;background:rgba(13,14,26,.8);padding:4px 10px;border-radius:999px;font-size:.75rem;font-weight:700}
+.badge-out{position:absolute;inset:auto 10px 10px auto;background:var(--warn);color:#fff;padding:5px 12px;border-radius:8px;font-weight:700;font-size:.8rem}
+.body{padding:16px;display:flex;flex-direction:column;gap:8px;flex:1}
+.body h3{font-size:1.05rem;line-height:1.25}
+.body p{color:var(--muted);font-size:.88rem;flex:1}
+.foot{display:flex;justify-content:space-between;align-items:center;margin-top:6px}
+.price{font-family:'Space Grotesk';font-size:1.3rem;font-weight:700}
+.stock{font-size:.8rem;display:flex;align-items:center;gap:6px;color:var(--ok)}
+.stock.low{color:#ffb454}.stock.zero{color:var(--warn)}
+.empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:60px 0}
+.empty i{font-size:2.2rem;margin-bottom:10px;display:block}
+
+/* Admin */
+.panel{padding:34px 0 60px}
+.panel-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:20px}
+.panel-head h2{font-size:1.6rem}
+.btn{border:0;border-radius:10px;padding:10px 16px;cursor:pointer;font-weight:700;display:inline-flex;gap:8px;align-items:center;background:var(--surface2);border:1px solid var(--line)}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));border:0;color:#fff}
+.btn.danger{color:var(--warn)}
+.btn.sm{padding:7px 11px;font-size:.82rem}
+.table{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:720px}
+th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);font-size:.9rem;vertical-align:middle}
+th{color:var(--muted);font-weight:500;font-size:.8rem}
+tr:last-child td{border-bottom:0}
+td img{width:48px;height:48px;border-radius:8px;object-fit:cover;display:block}
+.acts{display:flex;gap:6px}
+
+/* Modal */
+.modal{position:fixed;inset:0;background:rgba(5,6,15,.75);display:none;place-items:center;padding:16px;z-index:50}
+.modal.open{display:grid}
+.dialog{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);width:100%;max-width:480px;max-height:92vh;overflow:auto;padding:24px}
+.dialog h3{font-size:1.25rem;margin-bottom:16px}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.field label{font-size:.84rem;color:var(--muted);font-weight:700}
+.field input,.field select,.field textarea{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.actions{display:flex;justify-content:flex-end;gap:10px;margin-top:6px}
+.err{color:var(--warn);font-size:.85rem;min-height:1.2em;margin-bottom:8px}
+.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,30px);background:var(--surface2);border:1px solid var(--accent);padding:11px 18px;border-radius:999px;opacity:0;transition:.25s;z-index:60;pointer-events:none;font-weight:500}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+footer{border-top:1px solid var(--line);color:var(--muted);text-align:center;padding:22px;font-size:.85rem}
+[hidden]{display:none!important}
+@media(max-width:560px){.tab span{display:none}.tab{padding:9px 14px}.brand span{font-size:1.1rem}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <div class="brand"><i class="fa-solid fa-bolt"></i><span>VoltaShop</span></div>
+    <nav class="tabs" aria-label="Secciones">
+      <button class="tab active" id="tabStore"><i class="fa-solid fa-store"></i><span>Tienda</span></button>
+      <button class="tab" id="tabAdmin"><i class="fa-solid fa-lock"></i><span>Administrador</span></button>
+    </nav>
+  </div>
+</header>
+
+<!-- Vista cliente -->
+<main id="storeView">
+  <section class="hero wrap">
+    <h1>Accesorios que mantienen tu tecnología en marcha</h1>
+    <p>Cargadores, audífonos, cables y smartwatches con stock actualizado en tiempo real.</p>
+  </section>
+  <div class="wrap">
+    <div class="filters">
+      <div class="search"><i class="fa-solid fa-magnifying-glass"></i>
+        <input id="q" type="search" placeholder="Buscar producto…" aria-label="Buscar producto"></div>
+      <div class="chips" id="chips"></div>
+    </div>
+    <div class="grid" id="grid"></div>
+  </div>
+</main>
+
+<!-- Vista administrador -->
+<main id="adminView" hidden>
+  <section class="wrap panel">
+    <div class="panel-head">
+      <div><h2>Inventario</h2><p style="color:var(--muted)" id="adminCount"></p></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn primary" id="addBtn"><i class="fa-solid fa-plus"></i>Agregar producto</button>
+        <button class="btn" id="resetBtn"><i class="fa-solid fa-rotate-left"></i>Restaurar ejemplos</button>
+        <button class="btn" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i>Salir</button>
+      </div>
+    </div>
+    <div class="table">
+      <table>
+        <thead><tr><th>Imagen</th><th>Producto</th><th>Categoría</th><th>Precio</th><th>Stock</th><th>Acciones</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<footer>© VoltaShop · Los datos se guardan en este navegador</footer>
+
+<!-- Modal login -->
+<div class="modal" id="loginModal">
+  <div class="dialog" role="dialog" aria-labelledby="loginTitle">
+    <h3 id="loginTitle"><i class="fa-solid fa-shield-halved"></i> Acceso de administrador</h3>
+    <div class="field"><label for="pass">Contraseña</label>
+      <input id="pass" type="password" autocomplete="off" placeholder="Ingresa la contraseña"></div>
+    <div class="err" id="loginErr"></div>
+    <div class="actions">
+      <button class="btn" id="loginCancel">Cancelar</button>
+      <button class="btn primary" id="loginOk">Entrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal producto -->
+<div class="modal" id="prodModal">
+  <div class="dialog" role="dialog" aria-labelledby="prodTitle">
+    <h3 id="prodTitle">Nuevo producto</h3>
+    <div class="field"><label for="fImg">URL de la imagen (opcional)</label>
+      <input id="fImg" type="url" placeholder="https://…"></div>
+    <div class="field"><label for="fName">Nombre</label><input id="fName" maxlength="80"></div>
+    <div class="field"><label for="fDesc">Descripción</label><textarea id="fDesc" rows="3" maxlength="200"></textarea></div>
+    <div class="field"><label for="fCat">Categoría</label><select id="fCat"></select></div>
+    <div class="row">
+      <div class="field"><label for="fPrice">Precio (DOP)</label><input id="fPrice" type="number" min="0" step="0.01"></div>
+      <div class="field"><label for="fStock">Stock</label><input id="fStock" type="number" min="0" step="1"></div>
+    </div>
+    <div class="err" id="prodErr"></div>
+    <div class="actions">
+      <button class="btn" id="prodCancel">Cancelar</button>
+      <button class="btn primary" id="prodSave"><i class="fa-solid fa-floppy-disk"></i>Guardar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const ADMIN_PASSWORD = 'admin123';          // ← cámbiala aquí
+const CURRENCY = { locale: 'es-DO', code: 'DOP' };
+const CATEGORIES = ['Cargadores','Audífonos','Cables','Smartwatches'];
+const CAT_ICON = {Cargadores:'fa-plug',Audífonos:'fa-headphones','Cables':'fa-ethernet',Smartwatches:'fa-clock'};
+const KEY = 'voltashop_products_v1', SESSION = 'voltashop_admin';
+
+/* Imagen de respaldo (SVG embebido) cuando no hay URL o falla la carga */
+const PALETTES = {Cargadores:['#7c5cff','#4d8dff'],Audífonos:['#ff5d9e','#7c5cff'],Cables:['#2fd18b','#4d8dff'],Smartwatches:['#ffb454','#ff5d73']};
+const GLYPH = {Cargadores:'⚡',Audífonos:'🎧',Cables:'🔌',Smartwatches:'⌚'};
+function placeholder(cat){
+  const [a,b] = PALETTES[cat] || ['#7c5cff','#4d8dff'];
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient></defs><rect width="400" height="300" fill="url(#g)"/><text x="200" y="185" font-size="110" text-anchor="middle">${GLYPH[cat]||'📦'}</text></svg>`;
+  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+}
+
+const SEED = [
+  {id:1,name:'Cargador rápido GaN 65W',desc:'Dos puertos USB-C y uno USB-A. Carga laptop y celular a la vez.',cat:'Cargadores',price:1890,stock:14,img:''},
+  {id:2,name:'Cargador inalámbrico MagDock',desc:'Base magnética de 15W compatible con iPhone y Android.',cat:'Cargadores',price:1450,stock:6,img:''},
+  {id:3,name:'Audífonos Bluetooth Pulse ANC',desc:'Cancelación de ruido activa y 30 horas de batería.',cat:'Audífonos',price:4250,stock:9,img:''},
+  {id:4,name:'Earbuds Mini TWS',desc:'Diseño compacto, estuche de carga y resistencia al sudor IPX5.',cat:'Audífonos',price:1990,stock:0,img:''},
+  {id:5,name:'Cable USB-C trenzado 2 m',desc:'Nylon reforzado, carga de 100W y datos a 480 Mbps.',cat:'Cables',price:490,stock:40,img:''},
+  {id:6,name:'Cable Lightning certificado',desc:'Carga rápida para iPhone, 1 m con conectores reforzados.',cat:'Cables',price:650,stock:3,img:''},
+  {id:7,name:'Smartwatch Orbit S2',desc:'Pantalla AMOLED, GPS, monitor de sueño y ritmo cardíaco.',cat:'Smartwatches',price:5900,stock:7,img:''},
+  {id:8,name:'Banda fitness Flex 5',desc:'Resistente al agua, 14 días de batería y más de 20 modos deportivos.',cat:'Smartwatches',price:1750,stock:0,img:''}
+];
+
+/* Estado y persistencia */
+let products = load(), activeCat = 'Todos', query = '', editingId = null;
+function load(){
+  try{const d = JSON.parse(localStorage.getItem(KEY)); if(Array.isArray(d)) return d;}catch(e){}
+  return structuredClone(SEED);
+}
+function save(){ try{localStorage.setItem(KEY, JSON.stringify(products));}catch(e){toast('No se pudo guardar en el navegador');} }
+
+const $ = id => document.getElementById(id);
+const money = n => new Intl.NumberFormat(CURRENCY.locale,{style:'currency',currency:CURRENCY.code}).format(n);
+const esc = s => String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2200);}
+const imgTag = p => `<img src="${esc(p.img||placeholder(p.cat))}" alt="${esc(p.name)}" loading="lazy" data-cat="${esc(p.cat)}">`;
+document.addEventListener('error',e=>{ if(e.target.tagName==='IMG' && !e.target.dataset.fb){e.target.dataset.fb=1;e.target.src=placeholder(e.target.dataset.cat);} },true);
+
+/* Vista cliente */
+function renderChips(){
+  $('chips').innerHTML = ['Todos',...CATEGORIES].map(c=>
+    `<button class="chip ${c===activeCat?'active':''}" data-c="${c}">${c==='Todos'?'<i class="fa-solid fa-border-all"></i>':`<i class="fa-solid ${CAT_ICON[c]}"></i>`}${c}</button>`).join('');
+}
+function renderGrid(){
+  const q = query.trim().toLowerCase();
+  const list = products.filter(p => (activeCat==='Todos'||p.cat===activeCat) && (!q || (p.name+' '+p.desc).toLowerCase().includes(q)));
+  $('grid').innerHTML = list.length ? list.map(p=>{
+    const out = p.stock<=0, low = !out && p.stock<=5;
+    return `<article class="card ${out?'sold':''}">
+      <div class="thumb">${imgTag(p)}<span class="cat">${esc(p.cat)}</span>${out?'<span class="badge-out">Agotado</span>':''}</div>
+      <div class="body"><h3>${esc(p.name)}</h3><p>${esc(p.desc)}</p>
+        <div class="foot"><span class="price">${money(p.price)}</span>
+        <span class="stock ${out?'zero':low?'low':''}"><i class="fa-solid ${out?'fa-circle-xmark':'fa-box'}"></i>${out?'Sin stock':p.stock+' disponibles'}</span></div>
+      </div></article>`;}).join('')
+    : `<div class="empty"><i class="fa-regular fa-face-frown"></i>No hay productos que coincidan con tu búsqueda.</div>`;
+}
+
+/* Vista administrador */
+function renderAdmin(){
+  $('adminCount').textContent = `${products.length} productos · ${products.filter(p=>p.stock<=0).length} agotados`;
+  $('rows').innerHTML = products.length ? products.map(p=>`<tr>
+    <td>${imgTag(p)}</td><td><strong>${esc(p.name)}</strong></td><td>${esc(p.cat)}</td>
+    <td>${money(p.price)}</td><td>${p.stock<=0?'<span style="color:var(--warn)">Agotado</span>':p.stock}</td>
+    <td><div class="acts"><button class="btn sm" data-edit="${p.id}"><i class="fa-solid fa-pen"></i>Editar</button>
+    <button class="btn sm danger" data-del="${p.id}"><i class="fa-solid fa-trash"></i>Eliminar</button></div></td></tr>`).join('')
+    : `<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:30px">El inventario está vacío. Agrega tu primer producto.</td></tr>`;
+}
+function refresh(){ renderGrid(); renderAdmin(); }
+
+/* Navegación y acceso */
+function show(view){
+  const admin = view==='admin';
+  $('storeView').hidden = admin; $('adminView').hidden = !admin;
+  $('tabStore').classList.toggle('active',!admin); $('tabAdmin').classList.toggle('active',admin);
+  $('tabAdmin').querySelector('i').className = 'fa-solid ' + (isAdmin()?'fa-screwdriver-wrench':'fa-lock');
+  window.scrollTo(0,0);
+}
+const isAdmin = () => sessionStorage.getItem(SESSION)==='1';
+$('tabStore').onclick = () => show('store');
+$('tabAdmin').onclick = () => { if(isAdmin()) show('admin'); else { $('pass').value='';$('loginErr').textContent='';$('loginModal').classList.add('open');$('pass').focus(); } };
+function login(){
+  if($('pass').value===ADMIN_PASSWORD){ sessionStorage.setItem(SESSION,'1'); $('loginModal').classList.remove('open'); show('admin'); toast('Sesión de administrador iniciada'); }
+  else $('loginErr').textContent = 'Contraseña incorrecta. Inténtalo de nuevo.';
+}
+$('loginOk').onclick = login;
+$('pass').onkeydown = e => { if(e.key==='Enter') login(); };
+$('loginCancel').onclick = () => $('loginModal').classList.remove('open');
+$('logoutBtn').onclick = () => { sessionStorage.removeItem(SESSION); show('store'); toast('Sesión cerrada'); };
+
+/* CRUD */
+$('fCat').innerHTML = CATEGORIES.map(c=>`<option>${c}</option>`).join('');
+function openForm(p){
+  editingId = p ? p.id : null;
+  $('prodTitle').textContent = p ? 'Editar producto' : 'Nuevo producto';
+  $('fImg').value = p?.img||''; $('fName').value = p?.name||''; $('fDesc').value = p?.desc||'';
+  $('fCat').value = p?.cat||CATEGORIES[0]; $('fPrice').value = p?.price??''; $('fStock').value = p?.stock??'';
+  $('prodErr').textContent=''; $('prodModal').classList.add('open'); $('fName').focus();
+}
+$('addBtn').onclick = () => openForm(null);
+$('prodCancel').onclick = () => $('prodModal').classList.remove('open');
+$('prodSave').onclick = () => {
+  const name=$('fName').value.trim(), desc=$('fDesc').value.trim(), price=parseFloat($('fPrice').value), stock=parseInt($('fStock').value,10), img=$('fImg').value.trim();
+  if(!name||!desc){$('prodErr').textContent='Escribe un nombre y una descripción.';return;}
+  if(!(price>=0)){$('prodErr').textContent='Ingresa un precio válido.';return;}
+  if(!(stock>=0)){$('prodErr').textContent='Ingresa una cantidad de stock válida (0 o más).';return;}
+  const data = {name,desc,cat:$('fCat').value,price,stock,img};
+  if(editingId){ products = products.map(p=>p.id===editingId?{...p,...data}:p); toast('Producto actualizado'); }
+  else { products.unshift({id:Date.now(),...data}); toast('Producto agregado'); }
+  save(); refresh(); $('prodModal').classList.remove('open');
+};
+$('rows').onclick = e => {
+  const ed=e.target.closest('[data-edit]'), dl=e.target.closest('[data-del]');
+  if(ed) openForm(products.find(p=>p.id==ed.dataset.edit));
+  if(dl){ const p=products.find(x=>x.id==dl.dataset.del); if(p && confirm(`¿Eliminar "${p.name}" del inventario?`)){ products=products.filter(x=>x.id!==p.id); save(); refresh(); toast('Producto eliminado'); } }
+};
+$('resetBtn').onclick = () => { if(confirm('Se reemplazará el inventario actual por los productos de ejemplo. ¿Continuar?')){ products=structuredClone(SEED); save(); refresh(); toast('Ejemplos restaurados'); } };
+
+/* Filtros */
+$('chips').onclick = e => { const c=e.target.closest('.chip'); if(!c) return; activeCat=c.dataset.c; renderChips(); renderGrid(); };
+$('q').oninput = e => { query=e.target.value; renderGrid(); };
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') document.querySelectorAll('.modal.open').forEach(m=>m.classList.remove('open')); });
+
+/* Sincroniza otras pestañas abiertas */
+window.addEventListener('storage',e=>{ if(e.key===KEY){ products=load(); refresh(); } });
+
+renderChips(); refresh(); show('store');
+</script>
+</body>
+</html>
